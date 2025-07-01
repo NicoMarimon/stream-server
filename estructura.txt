@@ -1,0 +1,10 @@
+/media-server/
+├── config/
+│   ├── jellyfin/
+│   └── sonarr/
+├── downloads/        # Aquí se guardan las descargas temporales
+├── media/
+│   ├── tv/           # Series descargadas por Sonarr
+│   └── movies/       # Películas (si luego añades Radarr)
+└── docker-compose.yml
+

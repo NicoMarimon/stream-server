@@ -1,0 +1,75 @@
+version: "3.9"
+services:
+  jellyfin:
+    image: jellyfin/jellyfin
+    container_name: jellyfin
+    ports:
+      - "8096:8096"
+    volumes:
+      - ./config/jellyfin:/config
+      - ./media:/media
+    restart: unless-stopped
+
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    ports:
+      - "8989:8989"
+    environment:
+      - PUID=1000   # Ajusta según tu usuario
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./config/sonarr:/config
+      - ./downloads:/downloads
+      - ./media/tv:/tv
+    restart: unless-stopped
+
+  transmission:
+    image: linuxserver/transmission
+    container_name: transmission
+    ports:
+      - "9091:9091"          # Web UI
+      - "51413:51413"        # Puerto TCP
+      - "51413:51413/udp"    # Puerto UDP
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - USER=nico
+      - PASS=1234
+    volumes:
+      - ./downloads:/downloads
+      - ./config/transmission:/config
+      - ./watch:/watch      # opcional: carpeta para torrents .torrent automáticos
+    restart: unless-stopped 
+
+  jackett:
+    image: linuxserver/jackett
+    container_name: jackett
+    ports:
+      - "9117:9117"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./config/jackett:/config
+      - ./downloads:/downloads
+    restart: unless-stopped
+
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    ports:
+      - "7878:7878"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - ./config/radarr:/config
+      - ./downloads:/downloads
+      - ./media/movies:/movies
+    restart: unless-stopped
+
